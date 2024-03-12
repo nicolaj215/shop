@@ -10,7 +10,13 @@ router.get("/", shopController.getIndex);
 
 router.get("/products", shopController.getProducts);
 
+// Telling Express.js :productId is a dynamic route
+// Also since this is a dynamic route, any specific route of /products/x should be above this one 
+router.get("/products/:productId", shopController.getProduct);
+
 router.get("/cart", shopController.getCart);
+
+router.post("/cart", shopController.postCart);
 
 router.get("/orders", shopController.getOrders);
 
