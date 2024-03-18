@@ -1,1 +1,9 @@
-[{"id":"123245","title":"Dune #1","imageUrl":"https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1555447414i/44767458.jpg","price":"20","description":"By Frank Herbert"},{"id":"0.6325554861471636","title":"Dune #2","imageUrl":"https://m.media-amazon.com/images/I/810sNAUlgxL._AC_UF894,1000_QL80_.jpg","price":"21","description":"By Frank Herbert"}]
+[
+  {
+    "id": "0.7468335998344775",
+    "title": "Dune #1",
+    "imageUrl": "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1555447414i/44767458.jpg",
+    "price": "20",
+    "description": "By Frank Herbert"
+  }
+]
