@@ -2,9 +2,10 @@ const path = require("path");
 
 const express = require("express");
 const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
 
 const errorController = require("./controllers/error");
-const mongoConnect = require("./utility/database").mongoConnect;
+// const mongoConnect = require("./utility/database").mongoConnect;
 const User = require("./models/user");
 
 const app = express();
@@ -14,20 +15,19 @@ app.set("views", "views");
 
 const adminRoutes = require("./routes/admin");
 const shopRoutes = require("./routes/shop");
-const e = require("express");
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use((req, res, next) => {
-    User.findById("65fc86d80e6269501f5dab33")
-    .then(user => {
-        req.user = user;
-        next();
+  User.findById("65fde26a9c8a7b4c9fde2dc0")
+    .then((user) => {
+      req.user = user;
+      next();
     })
     .catch((err) => {
-        console.log(err);
-    })
+      console.log(err);
+    });
 });
 
 app.use(adminRoutes);
@@ -35,6 +35,28 @@ app.use(shopRoutes);
 
 app.use(errorController.get404);
 
-mongoConnect(() => {
+// mongoConnect(() => {
+//   app.listen(3000);
+// });
+
+mongoose
+  .connect(
+    "mongodb+srv://nicolaj215:9kGc6X6ccDqGdODx@cluster0.hnmh4z7.mongodb.net/shop?retryWrites=true&w=majority&appName=Cluster0"
+  )
+  .then((result) => {
+    User.findOne().then((user) => {
+      if (!user) {
+        const user = new User({
+          username: "Nicolaj",
+          email: "nicolaj@test.com",
+          cart: { items: [] },
+        });
+        user.save();
+      }
+    });
+    console.log("Connected to mongoDB!");
     app.listen(3000);
-});
+  })
+  .catch((err) => {
+    console.log(err);
+  });
