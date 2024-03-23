@@ -3,9 +3,14 @@ const path = require("path");
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const session = require("express-session");
+const MongoStore = require("connect-mongo");
 
 const errorController = require("./controllers/error");
 const User = require("./models/user");
+
+const MONGODB_URI =
+  "mongodb+srv://nicolaj215:9kGc6X6ccDqGdODx@cluster0.hnmh4z7.mongodb.net/shop?retryWrites=true&w=majority&appName=Cluster0";
 
 const app = express();
 
@@ -18,6 +23,17 @@ const authRoutes = require("./routes/auth");
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
+app.use(
+  session({
+    secret: "my secret",
+    resave: false,
+    saveUninitialized: false,
+    store: MongoStore.create({
+      mongoUrl: MONGODB_URI,
+      collectionName: "sessions",
+    }),
+  })
+);
 
 app.use((req, res, next) => {
   User.findById("65fde26a9c8a7b4c9fde2dc0")
@@ -37,9 +53,7 @@ app.use(authRoutes);
 app.use(errorController.get404);
 
 mongoose
-  .connect(
-    "mongodb+srv://nicolaj215:9kGc6X6ccDqGdODx@cluster0.hnmh4z7.mongodb.net/shop?retryWrites=true&w=majority&appName=Cluster0"
-  )
+  .connect(MONGODB_URI)
   .then((result) => {
     User.findOne().then((user) => {
       if (!user) {
